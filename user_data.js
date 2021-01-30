@@ -1,40 +1,73 @@
 require("dotenv").config();
 const request = require("request");
 
+//Funcion Obtener token de autentificacion
+const getToken = (url_token,cliente_id, client_secret) => {
+    return new Promise ((resolve, reject)=> {
 
-//Funcion - Obtener Credeciales de Acceso al Api de Twitch
-const getToken = (url_token,cliente_id, client_secret, callback) => {
+        const auth_data_at = {
+            url: url_token,
+            json: true,
+            body: {
+                client_id: cliente_id,
+                client_secret: client_secret,
+                grant_type: "client_credentials"
+    
+            }
+        };
 
-    const auth_data_at = {
-        url: url_token,
-        json: true,
-        body: {
-            client_id: cliente_id,
-            client_secret: client_secret,
-            grant_type: "client_credentials"
 
-        }
-    };
+        request.post(auth_data_at, (err, res) => {
+         
+            if (err) { reject(); }
+            resolve (res.body);
+        
+        });
+    } 
+    )};
 
-    request.post(auth_data_at, (err, res, body) => {
-        if (err) { return console.log(err); }
-        console.log("Statis: $(res.statusCode)");
-        console.log(body);
-        callback(res);
+
+
+ 
+//--------------------------------
+
+
+//Funcion Obtener el ID de usuario
+
+const getUserID = (user_url, accessToken) => {
+    return new Promise ((resolve, reject)=> {
+
+        const options4= {
+            url: user_url,
+            method: "Get",
+            headers: {
+            "Authorization": "Bearer " + accessToken,
+                    "Client-Id": process.env.CLIENT_ID }
+                  
+         
+            };
+          
+    request.get(options4,   (err, res)  => {
+        console.log(options4);
+        if (err) { reject(); }
+        console.log(res.body)
+        const userinfo= JSON.parse(res.body);
+        console.log(userinfo.data[0].id);
+        resolve (res.body);
     });
-};
-
-//Llamada - Obtener Credeciales de Acceso al Api de Twitch
-var AT = "";
-getToken(process.env.GET_TOKEN, process.env.CLIENT_ID, process.env.CLIENT_SECRET, (res) => {
-    AT = res.body.access_token;
-    //aqui se deberia tener el otro codigo?? anidar requests?
-    return AT;
-   
-})
-setTimeout(()=>{console.log("Acces Token");
-    console.log(AT);},3500);
+} 
+)};
+  
+//--------------------------------
 
 
+//Llamada a ambas funciones
 
-//obtener id del user
+getToken(process.env.GET_TOKEN, process.env.CLIENT_ID, process.env.CLIENT_SECRET)
+.then((datos) => {
+    AT=datos.access_token;
+    console.log("Llave de ingreso");
+    console.log(AT); 
+    getUserID(process.env.GET_USER_DATA, AT);
+    
+ } );

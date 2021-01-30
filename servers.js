@@ -141,3 +141,25 @@ setTimeout(() => { getUserFollows(process.env.GET_USER_FOLLOWS, AT, (response) =
 
 //--------------------------
 
+
+
+//------------------------------------
+ 
+
+
+// async function obtenertoken () {
+
+// try {
+// const getToken3 = await getToken2(process.env.GET_TOKEN, process.env.CLIENT_ID, process.env.CLIENT_SECRET);
+// var AT = "";
+// AT = getToken3.access_token;
+// console.log("Access Token");
+// console.log(AT);
+// return AT;
+//     }
+
+// catch (err) {console.log(err);}
+// };
+
+
+// obtenertoken ();
