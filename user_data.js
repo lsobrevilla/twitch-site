@@ -32,7 +32,8 @@ getToken(process.env.GET_TOKEN, process.env.CLIENT_ID, process.env.CLIENT_SECRET
     return AT;
    
 })
-setTimeout(()=>{console.log(AT);},1500);
+setTimeout(()=>{console.log("Acces Token");
+    console.log(AT);},3500);
 
 
 
